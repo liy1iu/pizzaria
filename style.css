@@ -1,0 +1,964 @@
+/* ── FONTE ───────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap');
+
+/* ── VARIÁVEIS ───────────────────────────────────────────── */
+:root {
+  --bg:             #ffefef;
+  --primaria:       #db3432;
+  --primaria-dark:  #902a25;
+  --secundaria:     #ff9d9c;
+  --verde:          #426d34;
+  --verde-dark:     #345629;
+  --texto:          #2a0a0a;
+  --texto-horario:  #cfc2c2;
+  --contorno-hor:   #f2e3e3;
+  --aberto:         #426d34;
+  --fechado:        #db3432;
+  --pix:            #32bcad;
+  --branco:         #ffffff;
+}
+
+/* ── RESET ───────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: var(--bg);
+  background-image: radial-gradient(circle, rgba(212, 168, 168, 0.45) 2.2px, transparent 2.2px);
+  background-size: 32px 32px;
+  color: var(--texto);
+  min-height: 100vh;
+}
+
+/* ── HEADER ──────────────────────────────────────────────── */
+header {
+  background: var(--primaria);
+  color: var(--branco);
+  text-align: center;
+  padding: 2.5rem 1rem 2rem;
+}
+
+header h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -.01em;
+}
+
+header p.tagline {
+  font-size: .85rem;
+  color: rgba(255,255,255,.75);
+  margin-top: .4rem;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+/* ── STATUS BADGE ────────────────────────────────────────── */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  margin-top: 1rem;
+  padding: .4rem 1.2rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: .88rem;
+  background: rgba(255,255,255,.2);
+  color: #fff;
+  border: 1.5px solid rgba(255,255,255,.4);
+}
+
+.status-badge.aberto  { background: var(--verde); border-color: var(--verde-dark); }
+.status-badge.fechado { background: rgba(255,255,255,.2); border-color: rgba(255,255,255,.4); }
+
+.status-badge .dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #fff;
+  animation: pulse 1.4s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: .3; }
+}
+
+/* ── POP-UP FECHADO (ao entrar no site) ──────────────────── */
+#popup-fechado {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  z-index: 500;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+#popup-fechado.visivel { display: flex; }
+
+.popup-box {
+  background: var(--branco);
+  border-radius: 22px;
+  padding: 2.3rem 2rem;
+  max-width: 430px;
+  width: 100%;
+  text-align: center;
+  border-top: 6px solid var(--primaria);
+  box-shadow: 0 20px 45px rgba(42, 10, 10, 0.16);
+}
+
+.popup-box .popup-icone {
+  font-size: 2.4rem;
+  display: block;
+  margin-bottom: .8rem;
+}
+
+.popup-box h2 {
+  font-size: clamp(1.35rem, 4vw, 1.7rem);
+  font-weight: 800;
+  color: var(--primaria-dark);
+  margin-bottom: .75rem;
+  line-height: 1.25;
+}
+
+.popup-box p {
+  font-size: 1rem;
+  color: #7d6868;
+  line-height: 1.75;
+  margin-bottom: 1.4rem;
+  font-weight: 600;
+}
+
+.popup-btn-ver {
+  display: block;
+  width: 100%;
+  padding: 1rem 1.1rem;
+  background: var(--primaria);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background .2s, transform .15s;
+}
+
+.popup-btn-ver:hover {
+  background: var(--primaria-dark);
+  transform: translateY(-1px);
+}
+
+/* ── AVISO FECHADO (faixa topo) ──────────────────────────── */
+#aviso-fechado {
+  display: none !important;
+}
+
+/* ── INFO BAR ────────────────────────────────────────────── */
+.info-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.2rem;
+  background: var(--verde);
+  color: rgba(255,255,255,.9);
+  padding: .8rem 1rem;
+  font-size: .84rem;
+  font-weight: 600;
+}
+
+.info-bar a {
+  color: rgba(255,255,255,.9);
+  text-decoration: none;
+}
+
+/* ── HORÁRIOS ────────────────────────────────────────────── */
+.horarios-wrap {
+  max-width: 460px;
+  margin: 2rem auto 0;
+  padding: 0 1rem;
+}
+
+.hor-header {
+  background: var(--primaria);
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 1.02rem;
+  padding: .95rem 1.2rem;
+  text-align: center;
+  border-radius: 14px 14px 0 0;
+  letter-spacing: .02em;
+}
+
+.horarios-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--branco);
+  border-radius: 0 0 14px 14px;
+  overflow: hidden;
+  border: 1.5px solid var(--contorno-hor);
+  border-top: none;
+}
+
+.horarios-table td {
+  padding: .7rem 1.2rem;
+  font-size: .92rem;
+  color: #8f7f7f;
+  border-bottom: 1px solid var(--contorno-hor);
+  font-weight: 600;
+}
+
+.horarios-table tr:last-child td { border-bottom: none; }
+.horarios-table td:last-child     { text-align: right; }
+
+.horarios-table tr.hoje td {
+  background: #ffe2e2;
+  color: #7a1f1c;
+  font-weight: 700;
+}
+
+.fechado-dia { color: var(--primaria) !important; }
+
+/* ── TABS ────────────────────────────────────────────────── */
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: .75rem;
+  flex-wrap: wrap;
+  padding: 2rem 1rem 1rem;
+}
+
+.tab-btn {
+  border: 2px solid var(--primaria-dark);
+  background: transparent;
+  color: var(--primaria-dark);
+  padding: .7rem 1.6rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: .95rem;
+  transition: all .2s;
+  letter-spacing: .02em;
+}
+
+.tab-btn.ativo,
+.tab-btn:hover {
+  background: var(--primaria);
+  border-color: var(--primaria);
+  color: #fff;
+}
+
+/* ── MAIN ────────────────────────────────────────────────── */
+main {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 1rem 1rem 6rem;
+}
+
+/* ── TÍTULOS DE SEÇÃO ────────────────────────────────────── */
+.secao-titulo {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(1.35rem, 3.8vw, 1.75rem);
+  font-weight: 800;
+  color: var(--primaria-dark);
+  margin: 2.2rem 0 1.3rem;
+  line-height: 1.2;
+}
+
+.secao-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--primaria);
+  color: #fff;
+  font-size: .95rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+/* ── TAMANHOS ────────────────────────────────────────────── */
+
+.tamanhos-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: .7rem;
+}
+
+.tamanho-card {
+  background: var(--branco);
+  border: 2px solid var(--contorno-hor);
+  border-radius: 16px;
+  padding: 1rem .6rem;
+  cursor: pointer;
+  transition: all .2s;
+  text-align: center;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.tamanho-card:hover,
+.tamanho-card.selecionado {
+  border-color: var(--primaria);
+  background: #fff5f5;
+}
+
+.tamanho-card.selecionado {
+  box-shadow: 0 0 0 2px var(--secundaria);
+}
+
+/* TEXTO DOS CARDS */
+
+.tam-nome {
+  font-size: .85rem;
+  color: var(--primaria-dark);
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.tam-info {
+  font-size: .7rem;
+  color: #9b8e8e;
+  margin: .3rem 0 .4rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.tam-preco {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--primaria);
+}
+
+/* ── BARRA DE PROGRESSO (sticky) ─────────────────────────── */
+.progresso-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 239, 239, 0.96);
+  backdrop-filter: blur(6px);
+  padding: 1rem 0 .8rem;
+  border-bottom: 1.5px solid var(--contorno-hor);
+  margin-bottom: 1rem;
+}
+
+.sabores-instrucao {
+  background: #fff7f7;
+  border-left: 5px solid var(--primaria);
+  padding: 1rem 1.15rem;
+  border-radius: 0 14px 14px 0;
+  margin-bottom: .75rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--primaria-dark);
+  line-height: 1.55;
+  box-shadow: 0 8px 18px rgba(219, 52, 50, 0.06);
+}
+
+.sabores-progresso {
+  display: flex;
+  gap: .55rem;
+}
+
+.prog-slot {
+  height: 10px;
+  flex: 1;
+  border-radius: 999px;
+  background: #ead7d7;
+  transition: background .3s;
+}
+
+.prog-slot.preenchido { background: var(--primaria); }
+
+/* ── SABORES ─────────────────────────────────────────────── */
+.sabores-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: .85rem;
+}
+
+.sabor-card {
+  background: var(--branco);
+  border-radius: 14px;
+  border: 2px solid var(--contorno-hor);
+  padding: 1rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  cursor: pointer;
+  transition: all .2s;
+}
+
+.sabor-card:hover       { border-color: var(--secundaria); }
+.sabor-card.selecionado { border-color: var(--primaria); background: #fff5f5; }
+.sabor-card.bloqueado   { opacity: .4; cursor: not-allowed; }
+
+.sabor-check {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: .78rem;
+  font-weight: 700;
+  transition: all .2s;
+}
+
+.sabor-card.selecionado .sabor-check {
+  background: var(--primaria);
+  border-color: var(--primaria);
+  color: #fff;
+}
+
+.sabor-info { flex: 1; min-width: 0; }
+
+.s-nome {
+  font-weight: 800;
+  font-size: .93rem;
+  color: var(--primaria-dark);
+  line-height: 1.35;
+}
+
+.s-desc {
+  font-size: .77rem;
+  color: #998d8d;
+  margin-top: .2rem;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.s-preco {
+  font-weight: 700;
+  font-size: .83rem;
+  color: var(--primaria);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.s-preco.gratis {
+  color: #b7abab;
+  font-weight: 600;
+}
+
+/* ── BOTÃO ADD PIZZA ─────────────────────────────────────── */
+.btn-add-pizza {
+  display: block;
+  width: 100%;
+  max-width: 460px;
+  margin: 1.6rem auto 0;
+  padding: 1rem;
+  background: var(--primaria);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background .2s;
+  letter-spacing: .02em;
+}
+
+.btn-add-pizza:hover:not(:disabled) { background: var(--primaria-dark); }
+.btn-add-pizza:disabled             { opacity: .4; cursor: not-allowed; }
+
+/* ── BEBIDAS ─────────────────────────────────────────────── */
+.bebidas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 1rem;
+}
+
+.bebida-card {
+  background: var(--branco);
+  border-radius: 16px;
+  border: 2px solid var(--primaria-dark);
+  padding: 1.2rem;
+  text-align: center;
+}
+
+.b-emoji  { font-size: 2rem; display: block; margin-bottom: .4rem; }
+
+.b-nome {
+  font-weight: 800;
+  color: var(--primaria-dark);
+  font-size: .96rem;
+  line-height: 1.35;
+}
+
+.b-sub {
+  font-size: .78rem;
+  color: #a39595;
+  margin: .25rem 0 .55rem;
+  font-weight: 600;
+}
+
+.b-preco {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--primaria);
+  margin-bottom: .8rem;
+}
+
+.btn-beb {
+  width: 100%;
+  padding: .68rem;
+  background: var(--primaria);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: .88rem;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.btn-beb:hover { background: var(--primaria-dark); }
+
+/* ── FAB ─────────────────────────────────────────────────── */
+.carrinho-fab {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  background: var(--verde);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: .9rem 1.4rem;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: .95rem;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(66,109,52,.4);
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  z-index: 100;
+  transition: transform .2s, background .2s;
+}
+
+.carrinho-fab:hover { transform: scale(1.05); background: var(--verde-dark); }
+
+.fab-badge {
+  background: #fff;
+  color: var(--verde);
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .75rem;
+  font-weight: 800;
+}
+
+/* ── MODAL CARRINHO ──────────────────────────────────────── */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  z-index: 200;
+}
+
+.overlay.ativo {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.carrinho-modal {
+  background: var(--branco);
+  width: 100%;
+  max-width: 540px;
+  border-radius: 20px 20px 0 0;
+  padding: 1.5rem;
+  max-height: 85vh;
+  overflow-y: auto;
+  animation: slideUp .3s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+#modal-fechado {
+  z-index: 9999;
+}
+
+#modal-fechado.ativo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+#modal-fechado .carrinho-modal {
+  border-radius: 20px;
+  max-width: 430px;
+  width: 100%;
+  max-height: unset;
+  animation: none;
+}
+
+.modal-titulo {
+  font-family: 'Montserrat', sans-serif;
+  color: var(--primaria-dark);
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.item-carr {
+  display: flex;
+  align-items: flex-start;
+  gap: .5rem;
+  padding: .75rem 0;
+  border-bottom: 1px solid var(--contorno-hor);
+}
+
+.ic-info  { flex: 1; }
+
+.ic-nome {
+  font-weight: 700;
+  font-size: .93rem;
+  color: var(--texto);
+}
+
+.ic-det {
+  font-size: .76rem;
+  color: #9b8f8f;
+  margin-top: .2rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.ic-preco {
+  font-weight: 700;
+  font-size: .92rem;
+  color: var(--primaria);
+  white-space: nowrap;
+}
+
+.ic-rem {
+  background: none;
+  border: none;
+  color: #ccc;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: .2rem .4rem;
+  transition: color .15s;
+}
+
+.ic-rem:hover { color: var(--primaria); }
+
+.carr-vazio {
+  text-align: center;
+  color: #b6a8a8;
+  padding: 1.5rem 0;
+  font-size: .95rem;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 800;
+  font-size: 1.08rem;
+  color: var(--primaria-dark);
+  border-top: 2px solid var(--contorno-hor);
+  padding: .9rem 0;
+  margin-top: .35rem;
+}
+
+.obs-txt {
+  width: 100%;
+  margin-top: 1rem;
+  padding: .8rem;
+  border: 2px solid var(--contorno-hor);
+  border-radius: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: .9rem;
+  resize: vertical;
+  min-height: 70px;
+  color: var(--texto);
+}
+
+.obs-txt:focus { outline: none; border-color: var(--primaria); }
+
+/* ── TIPO DE PEDIDO ──────────────────────────────────────── */
+.tipo-pedido {
+  display: flex;
+  gap: .8rem;
+  margin-top: 1rem;
+}
+
+.tipo-pedido label {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: .75rem;
+  border: 2px solid var(--contorno-hor);
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: .9rem;
+  transition: all .2s;
+  color: var(--texto);
+}
+
+.tipo-pedido input[type=radio] { display: none; }
+
+.tipo-pedido label:has(input:checked) {
+  border-color: var(--primaria);
+  background: #fff5f5;
+  color: var(--primaria-dark);
+}
+
+/* ── FORMA DE PAGAMENTO ──────────────────────────────────── */
+.pagamento-titulo {
+  font-weight: 700;
+  font-size: .92rem;
+  color: var(--primaria-dark);
+  margin-top: 1.2rem;
+  margin-bottom: .55rem;
+}
+
+.pagamento-opcoes {
+  display: flex;
+  gap: .6rem;
+  flex-wrap: wrap;
+}
+
+.pgto-label {
+  flex: 1;
+  min-width: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .3rem;
+  padding: .7rem .45rem;
+  border: 2px solid var(--contorno-hor);
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: .8rem;
+  text-align: center;
+  transition: all .2s;
+  color: var(--texto);
+}
+
+.pgto-label input[type=radio] { display: none; }
+
+.pgto-label:has(input:checked) {
+  border-color: var(--primaria);
+  background: #fff5f5;
+  color: var(--primaria-dark);
+}
+
+.pgto-label:has(input[value="pix"]:checked) {
+  border-color: var(--pix);
+  background: #e8faf8;
+  color: #0a6b63;
+}
+
+.pgto-icone { font-size: 1.3rem; }
+
+/* ── PIX INFO ────────────────────────────────────────────── */
+#pix-info {
+  display: none;
+  background: #e8faf8;
+  border: 1.5px solid var(--pix);
+  border-radius: 12px;
+  padding: .9rem 1rem;
+  margin-top: .85rem;
+  font-size: .88rem;
+  color: #0a6b63;
+}
+
+#pix-info.visivel { display: block; }
+
+#pix-info strong {
+  display: block;
+  font-size: .94rem;
+  margin-bottom: .25rem;
+  font-weight: 700;
+}
+
+#pix-info .pix-chave {
+  font-family: monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: .05em;
+  word-break: break-all;
+}
+
+.btn-copiar-pix {
+  display: inline-block;
+  margin-top: .55rem;
+  padding: .4rem .9rem;
+  background: var(--pix);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: .83rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* ── BOTÃO WHATSAPP ──────────────────────────────────────── */
+.btn-wpp {
+  display: block;
+  width: 100%;
+  margin-top: 1.2rem;
+  padding: .95rem;
+  background: #25d366;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: .97rem;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.btn-wpp:hover { background: #1da851; }
+
+.btn-fechar {
+  display: block;
+  width: 100%;
+  margin-top: .6rem;
+  padding: .7rem;
+  background: transparent;
+  color: #a99a9a;
+  border: none;
+  font-family: 'Montserrat', sans-serif;
+  font-size: .9rem;
+  cursor: pointer;
+}
+
+/* ── FOOTER ──────────────────────────────────────────────── */
+footer {
+  background: var(--primaria-dark);
+  color: rgba(255,255,255,.6);
+  text-align: center;
+  padding: 1.2rem;
+  font-size: .82rem;
+  font-weight: 500;
+}
+
+footer strong { color: #fff; }
+footer a      { color: rgba(255,255,255,.85); }
+
+/* ── UTILITÁRIO ──────────────────────────────────────────── */
+.hidden { display: none !important; }
+
+/* ── RESPONSIVO ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .tabs {
+    padding: 1.5rem 1rem 1rem;
+  }
+
+  .tab-btn {
+    width: 100%;
+    max-width: 320px;
+    padding: .85rem 1rem;
+    font-size: .95rem;
+  }
+
+  .tamanhos-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .sabores-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bebidas-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .popup-box {
+    padding: 2rem 1.3rem;
+  }
+
+  .tipo-pedido {
+    flex-direction: column;
+  }
+
+  .pagamento-opcoes {
+    flex-direction: column;
+  }
+
+  .pgto-label {
+    flex-direction: row;
+    justify-content: center;
+    min-width: unset;
+  }
+}
+
+@media (max-width: 520px) {
+  .tamanhos-grid,
+  .bebidas-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .secao-titulo {
+    font-size: 1.3rem;
+  }
+
+  .sabores-instrucao {
+    font-size: .95rem;
+    padding: .9rem 1rem;
+  }
+
+  .carrinho-fab {
+    right: 1rem;
+    left: 1rem;
+    bottom: 1rem;
+    justify-content: center;
+  }
+}
+/* ── RESPONSIVO TAMANHOS ───────────────────────────────── */
+
+@media (max-width: 900px) {
+  .tamanhos-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .tamanhos-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 420px) {
+  .tamanhos-grid {
+    grid-template-columns: 1fr;
+  }
+}
