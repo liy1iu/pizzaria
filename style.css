@@ -238,7 +238,7 @@ header p.tagline {
 
 .tab-btn {
   border: 2px solid var(--primaria-dark);
-  background: transparent;
+  background: #fff4f4;
   color: var(--primaria-dark);
   padding: .7rem 1.6rem;
   border-radius: 999px;
@@ -922,6 +922,14 @@ footer a      { color: rgba(255,255,255,.85); }
 }
 
 @media (max-width: 520px) {
+  body {
+    padding-bottom: 110px;
+  }
+
+  main {
+    padding-bottom: 8.5rem;
+  }
+
   .tamanhos-grid,
   .bebidas-grid {
     grid-template-columns: 1fr;
