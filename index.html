@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pizzaria PG Nina – Delivery</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ── POP-UP: FECHADO AO ENTRAR ────────────────────────────── -->
+<div id="popup-fechado">
+  <div class="popup-box">
+    <span class="popup-icone">🕙</span>
+    <h2>Estamos fechados agora</h2>
+    <p id="popup-fechado-texto"></p>
+    <button class="popup-btn-ver" onclick="fecharPopupFechado()">Ver cardápio mesmo assim</button>
+  </div>
+</div>
+
+<!-- ── MODAL: AVISO FECHADO (ao tentar finalizar) ───────────── -->
+<div class="overlay" id="modal-fechado" onclick="fecharModalFechado()">
+  <div class="carrinho-modal" style="text-align:center; padding: 2rem 1.5rem; border-top: 5px solid var(--primaria);">
+    <div style="font-size:2rem; margin-bottom:.8rem;">🕙</div>
+    <div class="modal-titulo" style="justify-content:center; display:block;">Estamos fechados!</div>
+    <p id="modal-fechado-texto" style="color:#999; font-size:.9rem; margin-bottom:1.5rem; line-height:1.6;"></p>
+    <button class="btn-add-pizza" style="max-width:100%; margin:0;" onclick="fecharModalFechado()">Entendido</button>
+  </div>
+</div>
+
+<!-- ── HEADER ───────────────────────────────────────────────── -->
+<header>
+  <h1>Pizzaria PG Nina</h1>
+  <p class="tagline">Delivery · Ponta Grossa – PR</p>
+  <div class="status-badge" id="statusBadge">
+    <div class="dot"></div>
+    <span id="statusTexto">Verificando...</span>
+  </div>
+</header>
+
+<!-- ── AVISO FECHADO (faixa) ────────────────────────────────── -->
+<div id="aviso-fechado"></div>
+
+<!-- ── INFO BAR ─────────────────────────────────────────────── -->
+<div class="info-bar">
+  <span>R. Gustavo Emílio Iansen, 740 – Contorno</span>
+  <a href="https://wa.me/5542998345573">(42) 99834-5573</a>
+  <span>Entrega ~50min · Retirada ~35min</span>
+</div>
+
+<!-- ── HORÁRIOS ─────────────────────────────────────────────── -->
+<div class="horarios-wrap">
+  <div class="hor-header">Horários de Funcionamento</div>
+  <table class="horarios-table">
+    <tr id="l-dom"><td>Domingo</td>       <td>18:30 – 23:30</td></tr>
+    <tr id="l-seg"><td>Segunda-feira</td> <td>18:30 – 23:30</td></tr>
+    <tr id="l-ter"><td>Terça-feira</td>   <td class="fechado-dia">Fechado</td></tr>
+    <tr id="l-qua"><td>Quarta-feira</td>  <td>18:30 – 23:30</td></tr>
+    <tr id="l-qui"><td>Quinta-feira</td>  <td>18:30 – 23:30</td></tr>
+    <tr id="l-sex"><td>Sexta-feira</td>   <td>18:30 – 23:30</td></tr>
+    <tr id="l-sab"><td>Sábado</td>        <td>18:30 – 23:30</td></tr>
+  </table>
+</div>
+
+<!-- ── TABS ─────────────────────────────────────────────────── -->
+<div class="tabs">
+  <button class="tab-btn ativo" onclick="mostrarSecao('pizzas', this)">Monte sua Pizza</button>
+  <button class="tab-btn"       onclick="mostrarSecao('bebidas', this)">Escolha uma Bebida</button>
+</div>
+
+<!-- ── CONTEÚDO PRINCIPAL ───────────────────────────────────── -->
+<main>
+
+  <!-- PIZZAS -->
+  <div id="secao-pizzas">
+    <h2 class="secao-titulo">
+      <span class="secao-num">1</span> Escolha o Tamanho
+    </h2>
+    <div class="tamanhos-grid" id="tamanhos-grid"></div>
+
+    <div id="area-sabores" class="hidden">
+      <h2 class="secao-titulo">
+        <span class="secao-num">2</span> Escolha os Sabores
+      </h2>
+
+      <!-- Barra sticky -->
+      <div class="progresso-sticky">
+        <div class="sabores-instrucao" id="sabores-instrucao"></div>
+        <div class="sabores-progresso" id="sabores-progresso"></div>
+      </div>
+
+      <div class="sabores-grid" id="sabores-grid"></div>
+      <button class="btn-add-pizza" id="btn-add-pizza" onclick="adicionarPizza()" disabled>
+        Adicionar Pizza ao Pedido
+      </button>
+    </div>
+  </div>
+
+  <!-- BEBIDAS -->
+  <div id="secao-bebidas" class="hidden">
+    <h2 class="secao-titulo" style="color: var(--primaria-dark);">
+      Bebidas
+    </h2>
+    <div class="bebidas-grid" id="bebidas-grid"></div>
+  </div>
+
+</main>
+
+<!-- ── FAB CARRINHO ─────────────────────────────────────────── -->
+<button class="carrinho-fab" onclick="abrirCarrinho()">
+  Ver Pedido <span class="fab-badge" id="fabBadge">0</span>
+</button>
+
+<!-- ── MODAL CARRINHO ───────────────────────────────────────── -->
+<div class="overlay" id="overlay" onclick="fecharFora(event)">
+  <div class="carrinho-modal">
+
+    <div class="modal-titulo">Meu Pedido</div>
+    <div id="listaCarrinho"></div>
+
+    <textarea class="obs-txt" id="obsInput"
+      placeholder="Observações (ex: sem cebola, bem assada...)"></textarea>
+
+    <!-- Tipo de entrega -->
+    <div class="tipo-pedido">
+      <label><input type="radio" name="tipo" value="entrega" checked><span>Entrega</span></label>
+      <label><input type="radio" name="tipo" value="retirada"><span>Retirada</span></label>
+    </div>
+
+    <!-- Forma de pagamento -->
+    <div class="pagamento-titulo">Forma de pagamento</div>
+    <div class="pagamento-opcoes">
+      <label class="pgto-label">
+        <input type="radio" name="pagamento" value="pix" checked>
+        <span class="pgto-icone">💚</span>
+        <span>Pix</span>
+      </label>
+      <label class="pgto-label">
+        <input type="radio" name="pagamento" value="debito">
+        <span class="pgto-icone">💳</span>
+        <span>Débito</span>
+      </label>
+      <label class="pgto-label">
+        <input type="radio" name="pagamento" value="credito">
+        <span class="pgto-icone">💳</span>
+        <span>Crédito</span>
+      </label>
+    </div>
+
+    <!-- Info do Pix -->
+    <div id="pix-info" class="visivel">
+      <strong>Chave Pix da Pizzaria</strong>
+      <span class="pix-chave" id="pix-chave-valor">(42) 99874-7570</span>
+      <br>
+      <small>Tipo: Telefone · Titular: Pizzaria PG Nina</small>
+      <br>
+      <button class="btn-copiar-pix" id="btn-copiar-pix" onclick="copiarPix()">Copiar chave</button>
+    </div>
+
+    <button class="btn-wpp" onclick="enviarWhatsApp()">Enviar pedido pelo WhatsApp</button>
+    <button class="btn-fechar" onclick="fecharCarrinho()">Fechar</button>
+
+  </div>
+</div>
+
+<!-- ── FOOTER ───────────────────────────────────────────────── -->
+<footer>
+  <strong>Pizzaria PG Nina</strong> · Rua Gustavo Emílio Iansen, 740 – Contorno, Ponta Grossa-PR<br>
+  <a href="https://wa.me/5542998345573">(42) 99834-5573</a>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
